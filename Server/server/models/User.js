@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     userType: {
         type: String,
         required: true,
+    },
+    venmoHandle: {
+        type: String,
+        unique: true,
     }
 })
 
