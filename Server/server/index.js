@@ -1,8 +1,22 @@
-//Database setup
+//Imports
 const mongoose = require("mongoose");
-const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/launchpad_2023";
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require('cors'); //allows our client to access our server locally
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+require("dotenv").config();
+require("./src/config/passport");
+require("./src/config/google");
 
+// routes
+var authRouter = require("./routes/auth")
 
+// models
+const Event = require('./models/Event')
+const User = require('./models/User')
+const Ticket = require('./models/Ticket')
+
+const mongoDBURL = process.env.MONGODB_URL
 
 mongoose.connect(mongoDBURL, {
     useNewUrlParser: true,
@@ -36,17 +50,16 @@ const start = async () => {
 };
 start()
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require('cors'); //allows our client to access our server locally
-
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const Event = require('./models/Event')
-const User = require('./models/User')
-const Ticket = require('./models/Ticket')
+// Initialize Passport and configure it to use sessions
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(authRouter);
+
+
 
 // this will be your "database"
 var database =[
