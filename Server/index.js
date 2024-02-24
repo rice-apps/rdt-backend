@@ -151,15 +151,31 @@ app.get('/getevent', async (req, res, next) => {
 
 
     
-// TODO ROUTE #2 - Add a new shopping item
+// TODO ROUTE #2 - Add a new event
 
-app.post("/add", (req, res, next) => {
+app.post("/addevent", async (req, res, next) => {
+    try {
+        const newEvent = new Event({
+            name: req.body.name,
+            date: req.body.date,
+            deadline: req.body.deadline,
+            description: req.body.description,
+            price: req.body.price,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            location: req.body.location,
+            photo: req.body.photo,
+            seatingChart: req.body.seatingChart,
+            openTo: req.body.openTo
+        });
 
-  const newItem = new Item({...req.body});
-  
-  newItem.save();
-  res.json(newItem)
-})
+        await newEvent.save();
+        res.status(201).json({newEvent: newEvent})
+    } catch (error) {
+        console.error("Error creating event: ", error);
+        res.status(500).send(error.message);
+    } 
+});
 
 
 // TODO ROUTE #3 - Remove an existing shopping item
