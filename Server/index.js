@@ -117,12 +117,19 @@ app.get('/getmytickets', async (req, res, next) => {
         res.json(tickets);
     });
 
-// For the admin to get attendees - Tayten
+// For the admin to get tickets - Tayten
 app.get('/getattendees', async (req, res, next) => {
-        console.log("test4");
-        //Need to filter by users that are going to events 
-        const attendees = await User.find();
-        res.json(attendees);
+    try {
+        const event = await Event.findOne({ name: req.body.name });
+        if (event) {
+            res.json(event.tickets);
+        } else {
+            res.status(404).json({ error: 'Event not found' });
+        }
+    } catch (error) {
+        next(error); // Pass the error
+    }
+
     });
 
 //Get all users - Ashley
