@@ -118,7 +118,7 @@ app.get('/getmytickets', async (req, res, next) => {
     });
 
 // For the admin to get tickets - Tayten
-app.get('/getattendees', async (req, res, next) => {
+app.get('/getTicketsEvent', async (req, res, next) => {
     try {
         const event = await Event.findOne({ name: req.body.name });
         if (event) {
