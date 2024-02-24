@@ -148,9 +148,14 @@ app.get('/getevent', async (req, res, next) => {
 
     
 
+//Make Tickets --Neyida
+app.post('/makeTicket', async (req, res, next) => {
+    const newTicket = new Ticket({...req.body});
+    newTicket.save();
+    res.json(newTicket);
+});
 
 
-    
 // TODO ROUTE #2 - Add a new shopping item
 
 app.post("/add", (req, res, next) => {
