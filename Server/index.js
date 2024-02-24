@@ -117,12 +117,19 @@ app.get('/getmytickets', async (req, res, next) => {
         res.json(tickets);
     });
 
-// For the admin to get attendees - Tayten
+// For the admin to get tickets - Tayten
 app.get('/getattendees', async (req, res, next) => {
-        console.log("test4");
-        //Need to filter by users that are going to events 
-        const attendees = await User.find();
-        res.json(attendees);
+    try {
+        const event = await Event.findOne({ name: req.body.name });
+        if (event) {
+            res.json(event.tickets);
+        } else {
+            res.status(404).json({ error: 'Event not found' });
+        }
+    } catch (error) {
+        next(error); // Pass the error
+    }
+
     });
 
 //Get all users - Ashley
@@ -155,16 +162,32 @@ app.post('/makeTicket', async (req, res, next) => {
     res.json(newTicket);
 });
 
+    
+// TODO ROUTE #2 - Add a new event
 
-// TODO ROUTE #2 - Add a new shopping item
+app.post("/addevent", async (req, res, next) => {
+    try {
+        const newEvent = new Event({
+            name: req.body.name,
+            date: req.body.date,
+            deadline: req.body.deadline,
+            description: req.body.description,
+            price: req.body.price,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            location: req.body.location,
+            photo: req.body.photo,
+            seatingChart: req.body.seatingChart,
+            openTo: req.body.openTo
+        });
 
-app.post("/add", (req, res, next) => {
-
-  const newItem = new Item({...req.body});
-  
-  newItem.save();
-  res.json(newItem)
-})
+        await newEvent.save();
+        res.status(201).json({newEvent: newEvent})
+    } catch (error) {
+        console.error("Error creating event: ", error);
+        res.status(500).send(error.message);
+    } 
+});
 
 
 // TODO ROUTE #3 - Remove an existing shopping item
