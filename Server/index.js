@@ -1,6 +1,6 @@
 //Database setup
 const mongoose = require("mongoose");
-const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/launchpad_2023";
+const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/rdt";
 
 
 
@@ -140,7 +140,7 @@ app.get('/getticket', async (req, res, next) => {
 app.get('/getevent/:itemName', async (req, res, next) => {
     console.log("test6");
     const itemName = req.params.name;
-    const event = await Database.findOne({"name" : itemName});
+    const event = await Event.findOne({"name" : itemName});
     res.json(event);
 });
 
