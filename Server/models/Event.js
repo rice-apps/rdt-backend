@@ -42,6 +42,10 @@ const eventSchema = new mongoose.Schema({
     },
     openTo: {
         type: Map,
+    },
+    tickets: {
+        type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
+        ref: "Ticket", // Reference to 'User' model
     }
 })
 
