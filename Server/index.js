@@ -103,9 +103,6 @@ app.get('/getallfutureevents', async (req, res, next) => {
     res.json(events);
     });
 
-    
-
-
 
 
 // TODO ROUTE #2 -> For Next Week 
@@ -140,14 +137,12 @@ app.get('/getticket', async (req, res, next) => {
 });
 
 // Get event- Rachel
-app.get('/getevent', async (req, res, next) => {
+app.get('/getevent/:itemName', async (req, res, next) => {
     console.log("test6");
-    const event = await Event.find();
+    const itemName = req.params.name;
+    const event = await Database.findOne({"name" : itemName});
     res.json(event);
 });
-
-    
-
 
 
     
