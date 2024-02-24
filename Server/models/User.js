@@ -1,6 +1,11 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
+    tickets: {
+        type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
+        ref: "Ticket", // Reference to 'User' model
+        required: true,
+    },
     username: {
         type: String,
         required: true,
