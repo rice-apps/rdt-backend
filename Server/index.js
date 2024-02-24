@@ -140,7 +140,7 @@ app.get('/getusers', async (req, res, next) => {
 });
 
 // Get ticket -Neyida
-app.get('/getticket', async (req, res, next) => {
+app.post('/getticket', async (req, res, next) => {
     console.log("test5");
     const ticket = await Ticket.find();
     res.json(ticket);
