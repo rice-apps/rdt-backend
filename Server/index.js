@@ -84,22 +84,20 @@ var database =[
 
 // TODO ROUTE #1 - Get all current events
 // for admin to be able to see all events (past and future)
+//Done
 app.get("/getallevents", async (req, res, next) => {
-    console.log("test1")
     const all_events = await Event.find();
     res.json(all_events);
 
 });
 
-// default for client - Rahul
+// default for client - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
-    console.log("test2");
     const currentDate = new Date();
-
-    //database is not printing
-    console.log(database)
-    const events = database.filter(event => new Date(event.date) >= currentDate);
-    console.log(events)
+    //gets all the events
+    const all_events = await Event.find()
+    //filters each every by Date to check if it's today or in the future
+    const events = all_events.filter(event => new Date(event.date) >= currentDate);
     res.json(events);
     });
 
@@ -151,15 +149,31 @@ app.get('/getevent', async (req, res, next) => {
 
 
     
-// TODO ROUTE #2 - Add a new shopping item
+// TODO ROUTE #2 - Add a new event Done
 
-app.post("/add", (req, res, next) => {
+app.post("/addevent", async (req, res, next) => {
+    try {
+        const newEvent = new Event({
+            name: req.body.name,
+            date: req.body.date,
+            deadline: req.body.deadline,
+            description: req.body.description,
+            price: req.body.price,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            location: req.body.location,
+            photo: req.body.photo,
+            seatingChart: req.body.seatingChart,
+            openTo: req.body.openTo
+        });
 
-  const newItem = new Item({...req.body});
-  
-  newItem.save();
-  res.json(newItem)
-})
+        await newEvent.save();
+        res.status(201).json({newEvent: newEvent})
+    } catch (error) {
+        console.error("Error creating event: ", error);
+        res.status(500).send(error.message);
+    } 
+});
 
 
 // TODO ROUTE #3 - Remove an existing shopping item
