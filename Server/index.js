@@ -94,12 +94,21 @@ app.get("/getallevents", async (req, res, next) => {
 
 // default for client to see all upcoming events - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
-    console.log("test2")
-    const currentDate = new Date();
-
-    //filtered events to see if date field is greater than or equal to current date
-    const future_events = await Event.find({date: {$gte: currentDate}})
-    res.json(future_events);
+    try{
+        console.log("test2")
+        const currentDate = new Date();
+        //filtered events to see if date field is greater than or equal to current date
+        const future_events = await Event.find({date: {$gte: currentDate}})
+        if (future_events.length != 0) {
+            res.json(future_events);
+        } else {
+            throw new Error('No Upcoming Events. Check Later')
+        }
+    } catch (err) {
+        console.log(err.message)
+        res.status(405).json({error: err.message})
+    }
+    
     });
 
     
