@@ -86,19 +86,20 @@ var database =[
 // for admin to be able to see all events (past and future)
 //Done
 app.get("/getallevents", async (req, res, next) => {
+    console.log('test1')
     const all_events = await Event.find();
     res.json(all_events);
 
 });
 
-// default for client - Rahul Done
+// default for client to see all upcoming events - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
+    console.log("test2")
     const currentDate = new Date();
-    //gets all the events
-    const all_events = await Event.find()
-    //filters each every by Date to check if it's today or in the future
-    const events = all_events.filter(event => new Date(event.date) >= currentDate);
-    res.json(events);
+
+    //filtered events to see if date field is greater than or equal to current date
+    const future_events = await Event.find({date: {$gte: currentDate}})
+    res.json(future_events);
     });
 
     
