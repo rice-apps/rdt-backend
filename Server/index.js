@@ -1,6 +1,6 @@
 //Database setup
 const mongoose = require("mongoose");
-const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/launchpad_2023";
+const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/rdt";
 
 
 
@@ -84,23 +84,22 @@ var database =[
 
 // TODO ROUTE #1 - Get all current events
 // for admin to be able to see all events (past and future)
+//Done
 app.get("/getallevents", async (req, res, next) => {
-    console.log("test1")
+    console.log('test1')
     const all_events = await Event.find();
     res.json(all_events);
 
 });
 
-// default for client - Rahul
+// default for client to see all upcoming events - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
-    console.log("test2");
+    console.log("test2")
     const currentDate = new Date();
 
-    //database is not printing
-    console.log(database)
-    const events = database.filter(event => new Date(event.date) >= currentDate);
-    console.log(events)
-    res.json(events);
+    //filtered events to see if date field is greater than or equal to current date
+    const future_events = await Event.find({date: {$gte: currentDate}})
+    res.json(future_events);
     });
 
     
@@ -163,7 +162,7 @@ app.post('/makeTicket', async (req, res, next) => {
 });
 
     
-// TODO ROUTE #2 - Add a new event
+// TODO ROUTE #2 - Add a new event Done
 
 app.post("/addevent", async (req, res, next) => {
     try {
