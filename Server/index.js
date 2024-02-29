@@ -209,8 +209,10 @@ app.delete("/remove", (req, res, next) => {
 
 
 // TODO ROUTE #4 - Update an existing shopping item (harder)
+// dummy
 
 app.put("/update", (req, res, next) => {
+    console.log(req)
     console.log(req)
     //let newData = database
 })
