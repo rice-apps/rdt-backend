@@ -145,13 +145,18 @@ app.get('/getevent', async (req, res, next) => {
 // Delete event - Timauri
 app.delete("/remove", (req, res, next) => {
     //console.log(req.body)
+    try {
     let newDatabase = database.filter(item => item.name != req.body.name)
     database = newDatabase
     console.log(newDatabase);
     res.json(database)
+   
+    } catch (error) {
+        console.error(error);
+    }
     });
 
-// TODO ROUTE #4 - Update an existing shopping item (harder)
+// TODO ROUTE #4 - Update event by time/name 
 
 app.put("/update", (req, res, next) => {
     console.log(req)
