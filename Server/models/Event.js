@@ -7,27 +7,23 @@ const eventSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    date: {
+    startDate: {
         type: Date,
         required: true,
     },
-    deadline: {
+    endDate: {
         type: Date,
         required: true,
     },
     description: {
         type: String,
     },
-    price: {
-        type: Array,
+    basePrice: {
+        type: Number,
         required: true,
     },
-    startTime: {
-        type: Date,
-        required: true,
-    },
-    endTime: {
-        type: Date,
+    redemptionCodes: {
+        type: Map,
         required: true,
     },
     location: {
@@ -39,9 +35,6 @@ const eventSchema = new mongoose.Schema({
     },
     seatingChart: {
         type: String,
-    },
-    openTo: {
-        type: Map,
     },
     tickets: {
         type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
