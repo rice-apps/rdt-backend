@@ -23,7 +23,7 @@ const eventSchema = new mongoose.Schema({
         required: true,
     },
     redemptionCodes: {
-        type: Array,
+        type: Map,
         required: true,
     },
     location: {
