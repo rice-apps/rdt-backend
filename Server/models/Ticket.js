@@ -1,9 +1,17 @@
 const mongoose = require("mongoose")
 
 const ticketSchema = new mongoose.Schema({
+
     event: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, // ObjectId
+        ref: "Event", // Reference to 'User' model
         required: true,
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId, // ObjectId
+        ref: "User", // Reference to 'User' model
+        required: true,
+        default: null,
     },
     seat: {
         type: String,
