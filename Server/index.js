@@ -2,8 +2,6 @@
 const mongoose = require("mongoose");
 const mongoDBURL = "mongodb+srv://tigerking:wphPpplcHRwNdv29@riceapps2020-21.ppsrv.gcp.mongodb.net/rdt";
 
-
-
 mongoose.connect(mongoDBURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -84,23 +82,31 @@ var database =[
 
 // TODO ROUTE #1 - Get all current events
 // for admin to be able to see all events (past and future)
+//Done
 app.get("/getallevents", async (req, res, next) => {
-    console.log("test1")
+    console.log('test1')
     const all_events = await Event.find();
     res.json(all_events);
 
 });
 
-// default for client - Rahul
+// default for client to see all upcoming events - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
-    console.log("test2");
-    const currentDate = new Date();
-
-    //database is not printing
-    console.log(database)
-    const events = database.filter(event => new Date(event.date) >= currentDate);
-    console.log(events)
-    res.json(events);
+    try{
+        console.log("test2")
+        const currentDate = new Date();
+        //filtered events to see if date field is greater than or equal to current date
+        const future_events = await Event.find({date: {$gte: currentDate}})
+        if (future_events.length != 0) {
+            res.json(future_events);
+        } else {
+            throw new Error('No Upcoming Events. Check Later')
+        }
+    } catch (err) {
+        console.log(err.message)
+        res.status(405).json({error: err.message})
+    }
+    
     });
 
 
@@ -114,12 +120,19 @@ app.get('/getmytickets', async (req, res, next) => {
         res.json(tickets);
     });
 
-// For the admin to get attendees - Tayten
-app.get('/getattendees', async (req, res, next) => {
-        console.log("test4");
-        //Need to filter by users that are going to events 
-        const attendees = await User.find();
-        res.json(attendees);
+// For the admin to get tickets - Tayten
+app.get('/getTicketsEvent', async (req, res, next) => {
+    try {
+        const event = await Event.findOne({ name: req.body.name });
+        if (event) {
+            res.json(event.tickets);
+        } else {
+            res.status(404).json({ error: 'Event not found' });
+        }
+    } catch (error) {
+        next(error); // Pass the error
+    }
+
     });
 
 //Get all users - Ashley
@@ -130,7 +143,7 @@ app.get('/getusers', async (req, res, next) => {
 });
 
 // Get ticket -Neyida
-app.get('/getticket', async (req, res, next) => {
+app.post('/getticket', async (req, res, next) => {
     console.log("test5");
     const ticket = await Ticket.find();
     res.json(ticket);
@@ -144,9 +157,17 @@ app.get('/getevent/:itemName', async (req, res, next) => {
     res.json(event);
 });
 
+    
+
+//Make Tickets --Neyida
+app.post('/makeTicket', async (req, res, next) => {
+    const newTicket = new Ticket({...req.body});
+    newTicket.save();
+    res.json(newTicket);
+});
 
     
-// TODO ROUTE #2 - Add a new event
+// TODO ROUTE #2 - Add a new event Done
 
 app.post("/addevent", async (req, res, next) => {
     try {
