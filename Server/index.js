@@ -46,12 +46,13 @@ app.use(cors());
 
 const Event = require('./models/Event')
 const User = require('./models/User')
-const Ticket = require('./models/Ticket')
+const Ticket = require('./models/Ticket');
+const Item = require("./models/Event");
 
 // this will be your "database"
 var database =[
     {
-      "name": "Event 1",
+      "name": "Event1",
       "date": "2024-02-15T00:00:00Z",
       "deadline": "2024-02-18T12:00:00Z",
       "description": "This is the first event",
@@ -61,7 +62,7 @@ var database =[
       "location": "Venue A"
     },
     {
-      "name": "Event 2",
+      "name": "Event2",
       "date": "2024-03-15T00:00:00Z",
       "deadline": "2024-03-10T12:00:00Z",
       "description": "Another event happening next month",
@@ -71,7 +72,7 @@ var database =[
       "location": "Venue B"
     },
     {
-      "name": "Event 3",
+      "name": "Event3",
       "date": "2024-04-10T00:00:00Z",
       "deadline": "2024-04-05T12:00:00Z",
       "description": "An event with a different location",
@@ -102,11 +103,6 @@ app.get('/getallfutureevents', async (req, res, next) => {
     console.log(events)
     res.json(events);
     });
-
-    
-
-
-
 
 // TODO ROUTE #2 -> For Next Week 
 
@@ -146,31 +142,14 @@ app.get('/getevent', async (req, res, next) => {
     res.json(event);
 });
 
-    
-
-
-
-    
-// TODO ROUTE #2 - Add a new shopping item
-
-app.post("/add", (req, res, next) => {
-
-  const newItem = new Item({...req.body});
-  
-  newItem.save();
-  res.json(newItem)
-})
-
-
-// TODO ROUTE #3 - Remove an existing shopping item
-
-
+// Delete event - Timauri
 app.delete("/remove", (req, res, next) => {
-    let newData = database.filter(item => item.name != req.body.name)
-    database = newData;
-    res.json(database);
-})
-
+    //console.log(req.body)
+    let newDatabase = database.filter(item => item.name != req.body.name)
+    database = newDatabase
+    console.log(newDatabase);
+    res.json(database)
+    });
 
 // TODO ROUTE #4 - Update an existing shopping item (harder)
 
