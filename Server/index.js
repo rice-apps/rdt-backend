@@ -171,6 +171,13 @@ app.post("/addevent", async (req, res, next) => {
 
         await newEvent.save();
         res.status(201).json({newEvent: newEvent})
+
+        for (let seat in newEvent.seatingChart){
+            const newTicket = new Ticket({seat: seat , event: newEvent});
+            await newTicket.save();
+        }
+
+
     } catch (error) {
         console.error("Error creating event: ", error);
         res.status(500).send(error.message);
