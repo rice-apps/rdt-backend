@@ -194,6 +194,36 @@ app.post("/addevent", async (req, res, next) => {
     } 
 });
 
+// Purchase ticket
+app.put("/purchaseticket", async (req, res, next) => {
+    try {
+        const user = await User.findOne({_id: req.body.user_id});
+    
+        // Assume iterable of ticket IDs is passed in
+        // Not sure if front end will know ticket IDs, might only pass in seat numbers
+        // Need to discuss how seat selection process will work
+        let tickets = [];
+        for (const ticketID in req.body.ticketIDs) {
+            const ticket = await Ticket.findOne({_id: ticketID});
+            ticket.user = req.body.user_id;
+            ticket.isPaid = true;
+            await ticket.save();
+            
+            tickets.push(ticket);
+            
+            // Push ticket into user's array of tickets
+            user.tickets.push(ticket);
+            await user.save();
+        }
+
+        res.status(201).json({purchasedTickets: tickets, userTickets: user.tickets});
+
+    } catch (error) {
+        console.error("Error purchasing ticket(s): ", error);
+        res.status(500).send(error.message);
+    }
+});
+
 
 // TODO ROUTE #3 - Remove an existing shopping item
 
