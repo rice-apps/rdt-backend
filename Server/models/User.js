@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
         ref: "Ticket", // Reference to 'User' model
         required: true,
     },
-    username: {
+    email: {
         type: String,
         required: true,
         unique: true,
@@ -14,16 +14,15 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
     },
-    email: {
+    fullName: {
         type: String,
         required: true,
-        unique: true,
     },
-    userType: {
-        type: String,
+    isRiceStudent: {
+        type: Boolean,
         required: true,
+        default: false,
     },
     venmoHandle: {
         type: String,
