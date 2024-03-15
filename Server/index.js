@@ -115,11 +115,23 @@ app.get('/getallfutureevents', async (req, res, next) => {
 // TODO ROUTE #2 -> For Next Week 
 
     // For client to see their events
-app.get('/getmytickets', async (req, res, next) => {
-        console.log("test3");
-        const tickets = await Ticket.find();
-        res.json(tickets);
+app.get('/getMyTickets', async (req, res, next) => {
+    //assuming the input from the request is the id of 
+    //the user who's finding their tickets
+    try {
+        const user = await User.findOne({_id: req.body.user_id});
+        const my_tickets = user.tickets
+        if (my_tickets.length != 0){
+            res.json(my_tickets)
+        } else {
+            throw new Error("You don't have any tickets")
+            }
+    } catch (error){
+        console.log(error.message)
+        res.status(406).json({error: error.message})
+        }
     });
+    
 
 // For the admin to get tickets - Tayten
 app.get('/getTicketsEvent', async (req, res, next) => {
