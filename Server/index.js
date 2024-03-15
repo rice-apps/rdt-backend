@@ -85,7 +85,6 @@ var database =[
 // for admin to be able to see all events (past and future)
 //Done
 app.get("/getallevents", async (req, res, next) => {
-    console.log('test1')
     const all_events = await Event.find();
     res.json(all_events);
 
@@ -94,7 +93,6 @@ app.get("/getallevents", async (req, res, next) => {
 // default for client to see all upcoming events - Rahul Done
 app.get('/getallfutureevents', async (req, res, next) => {
     try{
-        console.log("test2")
         const currentDate = new Date();
         //filtered events to see if date field is greater than or equal to current date
         const future_events = await Event.find({date: {$gte: currentDate}})
@@ -110,7 +108,37 @@ app.get('/getallfutureevents', async (req, res, next) => {
     
     });
 
-
+app.get('/getByPromo', async(req, res, next) => {
+    //assume promo code is entered as a string
+    //returns events that contain a specific promocode and are future events so
+    //people can't access past events that contain a same promocode
+    try{
+        const promoCode = req.body.promoCode;
+        const currentDate = new Date();
+        const events = await Event.aggregate([
+            {
+                $addFields: {
+                  redemptionCodesArray: { $objectToArray: "$redemptionCodes" }
+                }
+              },
+              // Match documents where any key matches the specified key
+              {
+                $match: {
+                  "redemptionCodesArray.k": promoCode,
+                  "startDate": {$gte: currentDate}
+                }
+              }
+        ]);
+        if (events.length != 0){
+            res.json(events)
+        } else {
+            throw new Error('No Events with that Promo Code')
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.status(405).json({error: error.message})
+    }
+    });
 
 // TODO ROUTE #2 -> For Next Week 
 
