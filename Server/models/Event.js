@@ -24,7 +24,6 @@ const eventSchema = new mongoose.Schema({
     },
     redemptionCodes: {
         type: Map,
-        required: true,
     },
     location: {
         type: String,
@@ -34,7 +33,8 @@ const eventSchema = new mongoose.Schema({
         type: String,
     },
     seatingChart: {
-        type: String,
+        type: [String],
+        required: true,
     },
     tickets: {
         type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds

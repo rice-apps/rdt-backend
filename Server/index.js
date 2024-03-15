@@ -169,22 +169,32 @@ app.post('/makeTicket', async (req, res, next) => {
 
     
 // TODO ROUTE #2 - Add a new event Done
-
 app.post("/addevent", async (req, res, next) => {
     try {
         const newEvent = new Event({
             name: req.body.name,
-            date: req.body.date,
-            deadline: req.body.deadline,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
             description: req.body.description,
-            price: req.body.price,
-            startTime: req.body.startTime,
-            endTime: req.body.endTime,
+            basePrice: req.body.basePrice,
+            redemptionCodes: req.body.redemptionCodes,
             location: req.body.location,
             photo: req.body.photo,
             seatingChart: req.body.seatingChart,
-            openTo: req.body.openTo
+            tickets: []
         });
+
+
+        for (let seat of newEvent.seatingChart){
+            try {
+                const newTicket = new Ticket({seat: seat , event: newEvent._id, isPaid: false, user: null});
+                await newTicket.save();
+                newEvent.tickets.push(newTicket._id)
+            } catch (error) {
+                console.error("Error creating ticket: ", error);
+                res.status(501).send(error.message);
+            }
+        }
 
         await newEvent.save();
         res.status(201).json({newEvent: newEvent})
