@@ -10,7 +10,6 @@ const ticketSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, // ObjectId
         ref: "User", // Reference to 'User' model
-        required: true,
         default: null,
     },
     seat: {
