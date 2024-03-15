@@ -116,8 +116,11 @@ app.get('/getallfutureevents', async (req, res, next) => {
 
     // For client to see their events
 app.get('/getMyTickets', async (req, res, next) => {
+    //assuming the input from the request is the id of 
+    //the user who's finding their tickets
     try {
-        const my_tickets = req.body.tickets
+        const user = await User.findOne({_id: req.body.user_id});
+        const my_tickets = user.tickets
         if (my_tickets.length != 0){
             res.json(my_tickets)
         } else {
