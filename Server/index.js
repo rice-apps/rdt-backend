@@ -171,15 +171,6 @@ app.get('/getevent/:itemName', async (req, res, next) => {
 });
 
     
-
-//Make Tickets --Neyida
-app.post('/makeTicket', async (req, res, next) => {
-    const newTicket = new Ticket({...req.body});
-    newTicket.save();
-    res.json(newTicket);
-});
-
-    
 // TODO ROUTE #2 - Add a new event Done
 app.post("/addevent", async (req, res, next) => {
     //Creates an event with empty tickets array
