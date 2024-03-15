@@ -38,7 +38,7 @@ const eventSchema = new mongoose.Schema({
         type: String,
     },
     seatingChart: {
-        type: String,
+        type: [String],
     },
     openTo: {
         type: Map,
