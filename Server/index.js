@@ -170,6 +170,7 @@ app.post('/makeTicket', async (req, res, next) => {
     
 // TODO ROUTE #2 - Add a new event Done
 app.post("/addevent", async (req, res, next) => {
+    //Creates an event with empty tickets array
     try {
         const newEvent = new Event({
             name: req.body.name,
@@ -184,7 +185,8 @@ app.post("/addevent", async (req, res, next) => {
             tickets: []
         });
 
-
+        //loops through each seat in the seating chart and creates a ticket for the seat
+        //adds the ticket's id to the Event's ticket array
         for (let seat of newEvent.seatingChart){
             try {
                 const newTicket = new Ticket({seat: seat , event: newEvent._id, isPaid: false, user: null});
