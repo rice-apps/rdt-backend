@@ -222,26 +222,28 @@ app.put("/editprofile", async (req, res, next) => {
 // Purchase ticket
 app.put("/purchaseticket", async (req, res, next) => {
     try {
+        //console.log(req);
+        console.log(req.body);
         const user = await User.findOne({_id: req.body.user_id});
     
         // Assume iterable of ticket IDs is passed in
         // Not sure if front end will know ticket IDs, might only pass in seat numbers
         // Need to discuss how seat selection process will work
-        let tickets = [];
-        for (const ticketID in req.body.ticketIDs) {
+        let purchasedTickets = [];
+        for (const ticketID of req.body.ticketIDs) {
             const ticket = await Ticket.findOne({_id: ticketID});
             ticket.user = req.body.user_id;
             ticket.isPaid = true;
             await ticket.save();
             
-            tickets.push(ticket);
+            purchasedTickets.push(ticket);
             
             // Push ticket into user's array of tickets
-            user.tickets.push(ticket);
+            user.tickets.push(ticketID);
             await user.save();
         }
 
-        res.status(201).json({purchasedTickets: tickets, userTickets: user.tickets});
+        res.status(201).json({purchasedTickets: purchasedTickets, userTickets: user.tickets});
 
     } catch (error) {
         console.error("Error purchasing ticket(s): ", error);
