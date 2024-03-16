@@ -284,6 +284,25 @@ app.put("/purchaseticket", async (req, res, next) => {
     }
 });
 
+app.put("/removeticket", async (req, res, next) => {
+    try {
+        // inputs: ticketID and user_id
+        const ticketToRemove = await Ticket.findOne({_id: req.body.ticketID});
+        ticketToRemove.user = null;
+        ticketToRemove.isPaid = false;
+        await ticketToRemove.save();
+
+        const user = await User.findOne({_id: req.body.user_id});
+        // filter out ticketID from user's array of purchased tickets
+        user.tickets = user.tickets.filter((id) => id.toString() !== req.body.ticketID);
+        await user.save();
+
+        res.status(201).json({removedTicket: ticketToRemove, userTickets: user.tickets});
+    } catch (error) {
+        console.error("Error removing ticket: ", error);
+        res.status(500).send(error.message);
+    }
+});
 
 // TODO ROUTE #3 - Remove an existing shopping item
 
