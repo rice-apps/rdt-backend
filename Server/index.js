@@ -244,7 +244,7 @@ app.put("/editprofile", async (req, res, next) => {
         // If a user can change their email, need to include functionality to potentially update isRiceStudent field
         const updatedUser = await User.findOneAndUpdate({_id: req.body.user_id}, req.body.changes, {
             new: true
-        }); // changes is a mapping of each field to its new value.
+        }); // changes is a mapping of each field to its new value
         res.status(201).json({updatedUserInfo: updatedUser});
     } catch (error) {
         console.error("Error editing profile: ", error);
