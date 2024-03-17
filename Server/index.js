@@ -178,7 +178,7 @@ app.get('/getTicketsEvent', async (req, res, next) => {
 
 //Get all users - Ashley
 app.get('/getusers', async (req, res, next) => {
-    console.log("test5");
+    console.log("test5 ");
     const users = await User.find();
     res.json(users);
 });
