@@ -2,15 +2,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-<<<<<<< HEAD
     "express": "^4.18.3",
     "mongoose": "^7.6.3"
-=======
-    "express": "^4.18.2",
-    "mongo": "^0.1.0",
-    "mongoose": "^7.6.3",
-    "node": "^21.6.2",
-    "nodemon": "^3.1.0"
->>>>>>> 327e3318a4dae9834820d4f48c81e69a5f6cc123
   }
 }

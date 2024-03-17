@@ -45,10 +45,9 @@ app.use(cors());
 const Event = require('./models/Event')
 const User = require('./models/User')
 const Ticket = require('./models/Ticket');
-const Item = require("./models/Event");
 
 // this will be your "database"
-var database =[
+const database =[
     {
       "name": "Event1",
       "date": "2024-02-15T00:00:00Z",
@@ -57,7 +56,8 @@ var database =[
       "price": [10.99, 15.99, 20.99],
       "startTime": "2024-02-20T18:00:00Z",
       "endTime": "2024-02-20T22:00:00Z",
-      "location": "Venue A"
+      "location": "Venue A",
+      "id": "1"
     },
     {
       "name": "Event2",
@@ -67,7 +67,8 @@ var database =[
       "price": [12.99, 18.99, 25.99],
       "startTime": "2024-03-15T19:30:00Z",
       "endTime": "2024-03-15T23:00:00Z",
-      "location": "Venue B"
+      "location": "Venue B",
+      "id": "2"
     },
     {
       "name": "Event3",
@@ -77,7 +78,8 @@ var database =[
       "price": [8.99, 14.99, 19.99],
       "startTime": "2024-04-10T17:00:00Z",
       "endTime": "2024-04-10T21:30:00Z",
-      "location": "Venue C"
+      "location": "Venue C",
+      "id": "3"
     }
   ]
 
@@ -157,8 +159,7 @@ app.get('/getevent/:itemName', async (req, res, next) => {
     const event = await Event.findOne({"name" : itemName});
     res.json(event);
 });
-
-    
+ 
 
 //Make Tickets --Neyida
 app.post('/makeTicket', async (req, res, next) => {
@@ -195,9 +196,9 @@ app.post("/addevent", async (req, res, next) => {
 });
 
 
-// TODO ROUTE #3 - Remove an existing shopping item
 
 
+//Delete Event Route:
 app.delete("/remove", (req, res, next) => {
     //console.log(req.body)
     try {
@@ -211,17 +212,21 @@ app.delete("/remove", (req, res, next) => {
     }
     });
 
-// TODO ROUTE #4 - Update event by time/name 
+// TODO ROUTE #4 - Update event 
+app.patch("/updateevent/:id", async(req, res) => {
+    const event = await Event.findById(req.params.id);
 
-app.put("/update", (req, res, next) => {
-    console.log(req)
-    //let newData = database
-})
+    if (!event) return res.status(404).send("Event not found");
 
-// TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
-
-
-
+    try {
+        const updatedEvent = await Event.findByIdAndUpdate({_id:eventId}, req.body, {new: true});
+        console.log(updatedEvent);
+        res.send({updatedEvent});
+    } catch (error) {
+        res.status(500).send(error.message);
+        console.log(error.message);
+        }
+    });
 
 
 module.exports = app;

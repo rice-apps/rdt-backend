@@ -35,7 +35,7 @@ const eventSchema = new mongoose.Schema({
         required: true,
     },
     photo: {
-        type: String,
+        type: String, //presumably a link to the picture 
     },
     seatingChart: {
         type: String,
@@ -46,6 +46,9 @@ const eventSchema = new mongoose.Schema({
     tickets: {
         type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
         ref: "Ticket", // Reference to 'User' model
+    },
+    id: {
+        type: String,
     }
 })
 
