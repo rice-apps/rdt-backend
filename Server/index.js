@@ -45,7 +45,6 @@ app.use(cors());
 const Event = require('./models/Event')
 const User = require('./models/User')
 const Ticket = require('./models/Ticket');
-const Item = require("./models/Event");
 
 // this will be your "database"
 var database =[
@@ -301,6 +300,26 @@ app.put("/removeticket", async (req, res, next) => {
     } catch (error) {
         console.error("Error removing ticket: ", error);
         res.status(500).send(error.message);
+    }
+});
+
+app.delete("/deleteevent", async (req, res, next) => {
+    // delete all tickets associated with the event
+    try {
+        const eventToDelete = await Event.findOne({_id: req.body.event_id});
+        for (const ticket_id of eventToDelete.tickets) {
+            await Ticket.findByIdAndDelete(ticket_id);
+            
+            // if a user already purchased this ticket, delete the ticket from their tickets array
+            await User.updateOne({tickets: ticket_id}, {$pull: {tickets: ticket_id}});
+        }
+
+        // delete the event
+        const deletedEvent = await Event.findByIdAndDelete(req.body.event_id);
+        res.status(200).json({deletedEvent: deletedEvent});
+    } catch (error) {
+        console.error("Error deleting event: ", error);
+        res.status(404).send(error.message);
     }
 });
 
