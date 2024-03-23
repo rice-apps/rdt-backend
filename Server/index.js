@@ -340,14 +340,40 @@ app.delete("/remove", (req, res, next) => {
     });
 
 // TODO ROUTE #4 - Update event by time/name 
-
 app.put("/update", (req, res, next) => {
     console.log(req)
     //let newData = database
 })
 
-// TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
+app.put("/editTicket", async (req, res, next) => {
+    const ticketId = req.params.id;
+    try {
+        const event = await Event.findById(ticketId);
 
+        if (!ticket) {
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        if (req.body.user) {
+            ticket.user = req.body.user;
+        }
+        if (req.body.event) {
+            ticket.event = req.body.event;
+        }
+        if (req.body.isPaid) {
+            ticket.isPaid = req.body.isPaid;
+        }
+        if (req.body.seat) {
+            event.seat = req.body.seat;
+        }
+
+        const updatedTicket = await ticket.save();
+        res.json(updatedTicket);
+    } catch (error) {
+        console.error("Error editing ticket: ", error);
+        res.status(500).send(error.message);
+    }
+});
 
 
 
