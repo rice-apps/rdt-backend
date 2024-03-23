@@ -219,7 +219,7 @@ app.patch("/updateevent/:id", async(req, res) => {
     if (!event) return res.status(404).send("Event not found");
 
     try {
-        const updatedEvent = await Event.findByIdAndUpdate({_id:eventId}, req.body, {new: true});
+        const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, {new: true});
         console.log(updatedEvent);
         res.send({updatedEvent});
     } catch (error) {
