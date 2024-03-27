@@ -7,12 +7,12 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_CALLBACK_URL,
+            callbackURL: "http://localhost:3000/auth/google/callback",
         },
         async (accessToken, refreshToken, profile, cb) => {
 
             let user = await User.findOne({
-                thirdPartyId: profile.id,
+                id: profile.id,
             });
             if (!user) {
                 console.log("New User!")
@@ -20,7 +20,7 @@ passport.use(
                 user = new User({
                     username: profile.displayName,
                     email: profile.emails[0].value,
-                    thirdPartyId: profile.id,
+                    id: profile.id,
                 });
                 await user.save();
             }

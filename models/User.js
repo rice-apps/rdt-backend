@@ -1,7 +1,12 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-    username: {
+    tickets: {
+        type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
+        ref: "Ticket", // Reference to 'User' model
+        required: true,
+    },
+    email: {
         type: String,
         required: true,
         unique: true,
@@ -9,16 +14,15 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
     },
-    email: {
+    fullName: {
         type: String,
         required: true,
-        unique: true,
     },
-    userType: {
-        type: String,
+    isRiceStudent: {
+        type: Boolean,
         required: true,
+        default: false,
     },
     venmoHandle: {
         type: String,
