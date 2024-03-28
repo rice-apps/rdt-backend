@@ -6,7 +6,7 @@ passport.serializeUser((user, done) => {
 });
 passport.deserializeUser(async (id, done) => {
     const currentUser = await User.findOne({
-        id
+        thirdPartyId: id
     });
     done(null, currentUser);
 });

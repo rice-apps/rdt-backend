@@ -40,10 +40,10 @@ router.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"],
 }));
 router.get("/auth/google/callback", passport.authenticate("google", {
-    successRedirect: '/home',
+    // successRedirect: '/home',
     failureRedirect: "/login",
     successFlash: "Successfully logged in!",
-}, (req, res) => {
+}), (req, res) => {
     if (req.user) {
         // const mySecretMessage = "This is secret message";
         // const sessionKey = md5(
@@ -63,6 +63,6 @@ router.get("/auth/google/callback", passport.authenticate("google", {
         res.redirect("https://localhost:3001/login");
     }
 
-}));
+});
 
 module.exports = router;

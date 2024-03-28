@@ -5,7 +5,7 @@ const ticketSchema = new mongoose.Schema({
     event: {
         type: mongoose.Schema.Types.ObjectId, // ObjectId
         ref: "Event", // Reference to 'User' model
-        required: true,
+        // required: true,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId, // ObjectId
@@ -14,11 +14,11 @@ const ticketSchema = new mongoose.Schema({
     },
     seat: {
         type: String,
-        required: true,
+        // required: true,
     },
     isPaid: {
         type: Boolean,
-        required: true,
+        // required: true,
         default: false,
     },
     

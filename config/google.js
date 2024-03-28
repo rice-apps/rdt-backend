@@ -12,15 +12,15 @@ passport.use(
         async (accessToken, refreshToken, profile, cb) => {
 
             let user = await User.findOne({
-                id: profile.id,
+                thirdPartyId: profile.id,
             });
             if (!user) {
                 console.log("New User!")
                 console.log(profile)
                 user = new User({
-                    username: profile.displayName,
+                    fullName: profile.displayName,
                     email: profile.emails[0].value,
-                    id: profile.id,
+                    thirdPartyId: profile.id,
                 });
                 await user.save();
             }
