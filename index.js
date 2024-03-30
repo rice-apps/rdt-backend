@@ -54,7 +54,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://rdt-backend-production.up.railway.app",
   "https://superb-pocket.surge.sh",
-  "enormous-fowl.surge.sh",
+  "http://enormous-fowl.surge.sh",
 ];
 
 app.use(
