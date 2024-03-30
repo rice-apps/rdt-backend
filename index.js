@@ -40,7 +40,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors"); //allows our client to access our server locally
 const passport = require("passport");
-const session = require("cookie-session");
+const session = require("express-session");
 flash = require("express-flash");
 require("dotenv").config();
 require("./config/passport");
