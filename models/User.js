@@ -1,27 +1,30 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
+    thirdPartyId: {
+        type: String,
+    },
     tickets: {
         type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds
         ref: "Ticket", // Reference to 'User' model
-        required: true,
+        // required: true,
     },
     email: {
         type: String,
-        required: true,
+        // required: true,
         unique: true,
     },
     password: {
         type: String,
-        required: true,
+        // required: true,
     },
     fullName: {
         type: String,
-        required: true,
+        // required: true,
     },
     isRiceStudent: {
         type: Boolean,
-        required: true,
+        // required: true,
         default: false,
     },
     venmoHandle: {

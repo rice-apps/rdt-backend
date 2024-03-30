@@ -4,37 +4,37 @@ const mongoose = require("mongoose")
 const eventSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
         unique: true,
     },
     startDate: {
         type: Date,
-        required: true,
+        // required: true,
     },
     endDate: {
         type: Date,
-        required: true,
+        // required: true,
     },
     description: {
         type: String,
     },
     basePrice: {
         type: Number,
-        required: true,
+        // required: true,
     },
     redemptionCodes: {
         type: Map,
     },
     location: {
         type: String,
-        required: true,
+        // required: true,
     },
     photo: {
         type: String,
     },
     seatingChart: {
         type: [String],
-        required: true,
+        // required: true,
     },
     tickets: {
         type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds

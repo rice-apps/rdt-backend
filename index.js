@@ -9,7 +9,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("MongoDB connected");
+    console.log("MongoDB connectedd");
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
@@ -39,14 +39,39 @@ start();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors"); //allows our client to access our server locally
+const passport = require('passport');
+const session = require("express-session");
+flash = require('express-flash')
+require("dotenv").config();
+require("./config/passport");
+require("./config/google");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+
+app.use(cors({ origin: "http://localhost:3001", credentials: true, }));
+// routes
+var authRouter = require("./routes/auth")
+
+app.use(
+  session({
+    secret: "anthony_secret_key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(flash());
+
+// Initialize Passport and configure it to use sessions
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(authRouter);
 
 const Event = require("./models/Event");
 const User = require("./models/User");
 const Ticket = require("./models/Ticket");
+
+
 
 // this will be your "database"
 var database = [
