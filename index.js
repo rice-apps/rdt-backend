@@ -190,7 +190,7 @@ app.post("/getticket", async (req, res, next) => {
 // Get event- Rachel
 app.get("/getevent/:eventID", async (req, res, next) => {
   console.log("test6");
-  const eventID = req.body.eventID;
+  const eventID = req.query.eventID;
   const event = await Event.findOne({ _id: eventID });
   res.json(event);
 });
