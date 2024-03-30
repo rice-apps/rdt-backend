@@ -39,9 +39,9 @@ start();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors"); //allows our client to access our server locally
-const passport = require('passport');
-const session = require("express-session");
-flash = require('express-flash')
+const passport = require("passport");
+const session = require("cookie-session");
+flash = require("express-flash");
 require("dotenv").config();
 require("./config/passport");
 require("./config/google");
@@ -49,9 +49,9 @@ require("./config/google");
 const app = express();
 app.use(bodyParser.json());
 
-app.use(cors({ origin: "http://localhost:3001", credentials: true, }));
+app.use(cors({ origin: "http://localhost:3001", credentials: true }));
 // routes
-var authRouter = require("./routes/auth")
+var authRouter = require("./routes/auth");
 
 app.use(
   session({
@@ -70,8 +70,6 @@ app.use(authRouter);
 const Event = require("./models/Event");
 const User = require("./models/User");
 const Ticket = require("./models/Ticket");
-
-
 
 // this will be your "database"
 var database = [
