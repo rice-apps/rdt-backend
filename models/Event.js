@@ -15,6 +15,9 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         // required: true,
     },
+    startTime: {
+        type: String,
+    },
     description: {
         type: String,
     },
@@ -22,8 +25,14 @@ const eventSchema = new mongoose.Schema({
         type: Number,
         // required: true,
     },
-    redemptionCodes: {
-        type: Map,
+    studentDiscount: {
+        type: Number
+    },
+    atDoorPrice: {
+        type: Number
+    },
+    redemptionCode: {
+        type: String,
     },
     location: {
         type: String,
@@ -32,7 +41,7 @@ const eventSchema = new mongoose.Schema({
     photo: {
         type: String,
     },
-    seatingChart: {
+    availableSeats: {
         type: [String],
         // required: true,
     },

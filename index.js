@@ -250,19 +250,22 @@ app.post("/addevent", async (req, res, next) => {
     const newEvent = new Event({
       name: req.body.name,
       startDate: req.body.startDate,
-      endDate: req.body.endDate,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
       description: req.body.description,
       basePrice: req.body.basePrice,
-      redemptionCodes: req.body.redemptionCodes,
+      redemptionCode: req.body.redemptionCode,
       location: req.body.location,
-      photo: req.body.photo,
-      seatingChart: req.body.seatingChart,
-      tickets: [],
+      studentDiscount: req.body.studentDiscount,
+      atDoorPrice: req.body.atDoorPrice
+      // photo: req.body.photo,
+      // availableSeats: req.body.seatingChart,
+      // tickets: [],
     });
 
     //loops through each seat in the seating chart and creates a ticket for the seat
     //adds the ticket's id to the Event's ticket array
-    for (let seat of newEvent.seatingChart) {
+    for (let seat of newEvent.availableSeats) {
       try {
         const newTicket = new Ticket({
           seat: seat,
@@ -401,9 +404,12 @@ app.delete("/remove", (req, res, next) => {
 
 // TODO ROUTE #4 - Update event by time/name
 
-app.put("/update", (req, res, next) => {
+app.put("/updateevent", async (req, res, next) => {
   console.log(req);
-  //let newData = database
+  let filter = {name: req.name}
+  let update = req.update
+  let updatedEvent = await Event.findOneAndUpdate(filter, update);
+
 });
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
