@@ -32,7 +32,7 @@ router.get("/home", (req, res) => {
     return res.status(401).send("You must be logged in to view this page");
   }
   // res.send("Welcome to your dashboard, " + req.user.email);
-  res.redirect("https://localhost:3000/home");
+  res.redirect("http://localhost:3000/home");
 });
 
 router.get(
@@ -56,16 +56,16 @@ router.get(
   (req, res) => {
     if (req.user) {
       if (appType === "ticketing") {
-        return res.redirect("https://localhost:3000/");
+        return res.redirect("http://localhost:3000/");
       }
       if (appType === "admin" && req.user.isAdmin) {
-        return res.redirect("https://localhost:3000/");
+        return res.redirect("http://localhost:3000/");
       } else {
         console.log("Not authorized to view this page!");
-        return res.redirect("https://localhost:3000/login");
+        return res.redirect("http://localhost:3000/login");
       }
     } else {
-      res.redirect("https://localhost:3000/login");
+      res.redirect("http://localhost:3000/login");
     }
   }
 );
