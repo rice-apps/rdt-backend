@@ -2,6 +2,14 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const mongoDBURL = process.env.MONGODB_URL;
+const uploadImage = require("./uploadCloudinary");
+const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 mongoose
   .connect(mongoDBURL, {
@@ -81,7 +89,11 @@ app.use(
   session({
     secret: "anthony_secret_key",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: "auto", // or true if you're using HTTPS
+      maxAge: 3600000, // Adjust according to your needs
+    },
   })
 );
 app.use(flash());
@@ -257,7 +269,7 @@ app.post("/addevent", async (req, res, next) => {
       redemptionCode: req.body.redemptionCode,
       location: req.body.location,
       studentDiscount: req.body.studentDiscount,
-      atDoorPrice: req.body.atDoorPrice
+      atDoorPrice: req.body.atDoorPrice,
       // photo: req.body.photo,
       // availableSeats: req.body.seatingChart,
       // tickets: [],
@@ -406,10 +418,27 @@ app.delete("/remove", (req, res, next) => {
 
 app.put("/updateevent", async (req, res, next) => {
   console.log(req);
-  let filter = {name: req.name}
-  let update = req.update
+  let filter = { name: req.name };
+  let update = req.update;
   let updatedEvent = await Event.findOneAndUpdate(filter, update);
+});
 
+app.put("/avatar", uploadImage("public_id_field"), async (req, res) => {
+  if (!req.fileurl || !req.fileid) {
+    return res.status(422).send({ message: "Image upload failed" });
+  }
+
+  const event = await Event.findOne({
+    name: req.body.name,
+  }).exec();
+  if (!event) {
+    return res.status(404).send({ message: "User profile not found" });
+  }
+
+  event.coverPhoto = req.fileurl;
+  await event.save();
+
+  res.json({ name: req.event.name, coverPhoto: req.fileurl });
 });
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
