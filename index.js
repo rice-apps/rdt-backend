@@ -276,6 +276,8 @@ app.post("/addevent", async (req, res, next) => {
           event: newEvent._id,
           isPaid: false,
           user: null,
+          buyerName: null,
+          attendeeName: null
         });
         await newTicket.save();
         newEvent.tickets.push(newTicket._id);
@@ -417,6 +419,28 @@ app.put("/updateevent", async (req, res, next) => {
   res.json(updatedEvent)
 
 });
+
+app.get('/ticketsforevent', async (req, res, next) => {
+  // console.log(req)
+  let name = req.query.name
+  const event = await Event.findOne({ name: name });
+  const ticketIds = event.tickets;
+  console.log(ticketIds)
+
+  try {
+    // Convert ticketIds to ObjectIDs
+    const objectIds = ticketIds.map(id => new mongoose.Types.ObjectId(id));
+
+    // Find tickets by IDs
+    const tickets = await Ticket.find({ _id: { $in: objectIds } });
+    console.log(tickets)
+
+    res.json({ tickets });
+  } catch (error) {
+    console.error('Error fetching tickets:', error);
+    res.status(500).json({ error: 'Failed to fetch tickets' });
+  }
+})
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
 
