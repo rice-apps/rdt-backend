@@ -1,6 +1,7 @@
 const passport = require("passport");
 const User = require("../models/User");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const adminEmails = process.env.ADMIN_EMAILS.split(",");
 
 passport.use(
   new GoogleStrategy(
