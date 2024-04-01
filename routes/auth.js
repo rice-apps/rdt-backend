@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
-
+var appType = "";
 router.get("/login/success", (req, res) => {
   if (req.user) {
     res.json({
@@ -37,6 +37,11 @@ router.get("/home", (req, res) => {
 
 router.get(
   "/auth/google",
+  (req, res, next) => {
+    req.session.appType = req.query.app;
+    appType = req.query.app;
+    next();
+  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -50,20 +55,15 @@ router.get(
   }),
   (req, res) => {
     if (req.user) {
-      // const mySecretMessage = "This is secret message";
-      // const sessionKey = md5(
-      //     mySecretMessage + new Date().getTime() + req.user.username
-      // );
-      // sessionUser[sessionKey] = req.user;
-
-      // res.cookie(cookieKey, sessionKey, {
-      //     maxAge: 3600 * 1000,
-      //     httpOnly: true,
-      //     sameSite: "None",
-      //     secure: true,
-      // });
-
-      res.redirect("https://localhost:3000/home");
+      if (appType === "ticketing") {
+        return res.redirect("https://localhost:3000/");
+      }
+      if (appType === "admin" && req.user.isAdmin) {
+        return res.redirect("https://localhost:3000/");
+      } else {
+        console.log("Not authorized to view this page!");
+        return res.redirect("https://localhost:3000/login");
+      }
     } else {
       res.redirect("https://localhost:3000/login");
     }
