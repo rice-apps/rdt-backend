@@ -7,6 +7,15 @@ const ticketSchema = new mongoose.Schema({
         ref: "Event", // Reference to 'User' model
         // required: true,
     },
+    buyerName: {
+        type: String, // ObjectId
+        // ref: "User", // Reference to 'User' model
+        default: null,
+    },
+    attendeeName: {
+        type: String,
+        default: null
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId, // ObjectId
         ref: "User", // Reference to 'User' model
@@ -21,6 +30,9 @@ const ticketSchema = new mongoose.Schema({
         // required: true,
         default: false,
     },
+    type: {
+        type: String,
+    }
     
 })
 

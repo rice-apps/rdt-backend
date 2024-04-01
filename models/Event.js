@@ -7,15 +7,18 @@ const eventSchema = new mongoose.Schema({
         // required: true,
         unique: true,
     },
-    startDate: {
-        type: Date,
+    date: {
+        type: String,
         // required: true,
     },
-    endDate: {
-        type: Date,
-        // required: true,
-    },
+    // endDate: {
+    //     type: Date,
+    //     // required: true,
+    // },
     startTime: {
+        type: String,
+    },
+    endTime: {
         type: String,
     },
     description: {
@@ -38,7 +41,10 @@ const eventSchema = new mongoose.Schema({
         type: String,
         // required: true,
     },
-    photo: {
+    coverPhoto: {
+        type: String,
+    },
+    seatingPhoto: {
         type: String,
     },
     availableSeats: {

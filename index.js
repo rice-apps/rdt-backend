@@ -261,7 +261,7 @@ app.post("/addevent", async (req, res, next) => {
   try {
     const newEvent = new Event({
       name: req.body.name,
-      startDate: req.body.startDate,
+      date: req.body.date,
       startTime: req.body.startTime,
       endTime: req.body.endTime,
       description: req.body.description,
@@ -270,9 +270,9 @@ app.post("/addevent", async (req, res, next) => {
       location: req.body.location,
       studentDiscount: req.body.studentDiscount,
       atDoorPrice: req.body.atDoorPrice,
+      availableSeats: req.body.availableSeats,
       // photo: req.body.photo,
       // availableSeats: req.body.seatingChart,
-      // tickets: [],
     });
 
     //loops through each seat in the seating chart and creates a ticket for the seat
@@ -284,6 +284,8 @@ app.post("/addevent", async (req, res, next) => {
           event: newEvent._id,
           isPaid: false,
           user: null,
+          buyerName: null,
+          attendeeName: null,
         });
         await newTicket.save();
         newEvent.tickets.push(newTicket._id);
@@ -417,10 +419,12 @@ app.delete("/remove", (req, res, next) => {
 // TODO ROUTE #4 - Update event by time/name
 
 app.put("/updateevent", async (req, res, next) => {
-  console.log(req);
-  let filter = { name: req.name };
-  let update = req.update;
+  // console.log(req);
+  let filter = req.query;
+  let update = req.body;
   let updatedEvent = await Event.findOneAndUpdate(filter, update);
+  // res.status(200)
+  res.json(updatedEvent);
 });
 
 app.put("/avatar", uploadImage("public_id_field"), async (req, res) => {
@@ -439,6 +443,28 @@ app.put("/avatar", uploadImage("public_id_field"), async (req, res) => {
   await event.save();
 
   res.json({ name: req.event.name, coverPhoto: req.fileurl });
+});
+
+app.get("/ticketsforevent", async (req, res, next) => {
+  // console.log(req)
+  let name = req.query.name;
+  const event = await Event.findOne({ name: name });
+  const ticketIds = event.tickets;
+  console.log(ticketIds);
+
+  try {
+    // Convert ticketIds to ObjectIDs
+    const objectIds = ticketIds.map((id) => new mongoose.Types.ObjectId(id));
+
+    // Find tickets by IDs
+    const tickets = await Ticket.find({ _id: { $in: objectIds } });
+    console.log(tickets);
+
+    res.json({ tickets });
+  } catch (error) {
+    console.error("Error fetching tickets:", error);
+    res.status(500).json({ error: "Failed to fetch tickets" });
+  }
 });
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
