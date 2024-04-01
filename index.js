@@ -405,10 +405,12 @@ app.delete("/remove", (req, res, next) => {
 // TODO ROUTE #4 - Update event by time/name
 
 app.put("/updateevent", async (req, res, next) => {
-  console.log(req);
-  let filter = {name: req.name}
-  let update = req.update
+  // console.log(req);
+  let filter = req.query
+  let update = req.body
   let updatedEvent = await Event.findOneAndUpdate(filter, update);
+  // res.status(200)
+  res.json(updatedEvent)
 
 });
 
