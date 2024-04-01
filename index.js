@@ -471,6 +471,50 @@ app.put(
   }
 );
 
+app.put(
+  "/imageRegisterCoverUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    // const event = await Event.findOne({
+    //   _id: req.body._id,
+    // }).exec();
+    // if (!event) {
+    //   return res.status(404).send({ message: "Event not found" });
+    // }
+
+    // event.seatingPhoto = req.fileurl;
+    // await event.save();
+
+    res.json({ coverPhoto: req.fileurl });
+  }
+);
+
+app.put(
+  "/imageRegisterSeatingUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    // const event = await Event.findOne({
+    //   _id: req.body._id,
+    // }).exec();
+    // if (!event) {
+    //   return res.status(404).send({ message: "Event not found" });
+    // }
+
+    // event.seatingPhoto = req.fileurl;
+    // await event.save();
+
+    res.json({ seatingPhoto: req.fileurl });
+  }
+);
+
 app.get("/ticketsforevent", async (req, res, next) => {
   // console.log(req)
   let name = req.query.name;
