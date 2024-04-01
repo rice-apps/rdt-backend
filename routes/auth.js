@@ -37,6 +37,11 @@ router.get("/home", (req, res) => {
 
 router.get(
   "/auth/google",
+  (req, res, next) => {
+    // Attach app type to session or request object for later use
+    req.session.appType = req.query.app;
+    next();
+  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -63,7 +68,15 @@ router.get(
       //     secure: true,
       // });
 
-      res.redirect("https://localhost:3000/home");
+      console.log("req.session.appType", req.session.appType);
+      console.log("req.user.isAdmin", req.user.isAdmin);
+      if (req.session.appType === "admin" && req.user.isAdmin) {
+        return res.redirect("https://localhost:3000/admin");
+      }
+      if (req.session.appType === "ticketing") {
+        return res.redirect("https://localhost:3000/home");
+      }
+      //   res.redirect("https://localhost:3000/home");
     } else {
       res.redirect("https://localhost:3000/login");
     }
