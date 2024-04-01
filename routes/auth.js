@@ -55,29 +55,15 @@ router.get(
   }),
   (req, res) => {
     if (req.user) {
-      // const mySecretMessage = "This is secret message";
-      // const sessionKey = md5(
-      //     mySecretMessage + new Date().getTime() + req.user.username
-      // );
-      // sessionUser[sessionKey] = req.user;
-
-      // res.cookie(cookieKey, sessionKey, {
-      //     maxAge: 3600 * 1000,
-      //     httpOnly: true,
-      //     sameSite: "None",
-      //     secure: true,
-      // });
-
-      console.log("req.session.appType", req.session.appType);
-      console.log("req.query.app", req.query.app);
-      console.log("req.user.isAdmin", req.user.isAdmin);
-      if (appType === "admin" && req.user.isAdmin) {
-        return res.redirect("https://localhost:3000/admin");
-      }
       if (appType === "ticketing") {
-        return res.redirect("https://localhost:3000/home");
+        return res.redirect("https://localhost:3000/");
       }
-      //   res.redirect("https://localhost:3000/home");
+      if (appType === "admin" && req.user.isAdmin) {
+        return res.redirect("https://localhost:3000/");
+      } else {
+        console.log("Not authorized to view this page!");
+        return res.redirect("https://localhost:3000/login");
+      }
     } else {
       res.redirect("https://localhost:3000/login");
     }
