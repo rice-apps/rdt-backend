@@ -13,14 +13,18 @@ passport.use(
       let user = await User.findOne({
         thirdPartyId: profile.id,
       });
+      const userEmail = profile.emails[0].value;
+
       if (!user) {
-        console.log("New User!");
-        console.log(profile);
         user = new User({
           fullName: profile.displayName,
-          email: profile.emails[0].value,
+          email: userEmail,
+          isAdmin: adminEmails.includes(userEmail),
           thirdPartyId: profile.id,
         });
+        await user.save();
+      } else {
+        user.isAdmin = adminEmails.includes(userEmail);
         await user.save();
       }
 
