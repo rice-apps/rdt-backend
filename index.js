@@ -81,7 +81,11 @@ app.use(
   session({
     secret: "anthony_secret_key",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: "auto", // or true if you're using HTTPS
+      maxAge: 3600000, // Adjust according to your needs
+    },
   })
 );
 app.use(flash());
@@ -257,7 +261,7 @@ app.post("/addevent", async (req, res, next) => {
       redemptionCode: req.body.redemptionCode,
       location: req.body.location,
       studentDiscount: req.body.studentDiscount,
-      atDoorPrice: req.body.atDoorPrice
+      atDoorPrice: req.body.atDoorPrice,
       // photo: req.body.photo,
       // availableSeats: req.body.seatingChart,
       // tickets: [],

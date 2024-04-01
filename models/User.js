@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   venmoHandle: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   isAdmin: {
     type: Boolean,
