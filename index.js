@@ -81,7 +81,11 @@ app.use(
   session({
     secret: "anthony_secret_key",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: "auto", // or true if you're using HTTPS
+      maxAge: 3600000, // Adjust according to your needs
+    },
   })
 );
 app.use(flash());
@@ -257,7 +261,7 @@ app.post("/addevent", async (req, res, next) => {
       redemptionCode: req.body.redemptionCode,
       location: req.body.location,
       studentDiscount: req.body.studentDiscount,
-      atDoorPrice: req.body.atDoorPrice
+      atDoorPrice: req.body.atDoorPrice,
       // photo: req.body.photo,
       // availableSeats: req.body.seatingChart,
       // tickets: [],
@@ -406,10 +410,9 @@ app.delete("/remove", (req, res, next) => {
 
 app.put("/updateevent", async (req, res, next) => {
   console.log(req);
-  let filter = {name: req.name}
-  let update = req.update
+  let filter = { name: req.name };
+  let update = req.update;
   let updatedEvent = await Event.findOneAndUpdate(filter, update);
-
 });
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)

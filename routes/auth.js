@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
-
+var appType = "";
 router.get("/login/success", (req, res) => {
   if (req.user) {
     res.json({
@@ -37,6 +37,11 @@ router.get("/home", (req, res) => {
 
 router.get(
   "/auth/google",
+  (req, res, next) => {
+    req.session.appType = req.query.app;
+    appType = req.query.app;
+    next();
+  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -63,12 +68,13 @@ router.get(
       //     secure: true,
       // });
 
+      console.log("req.session.appType", req.session.appType);
       console.log("req.query.app", req.query.app);
       console.log("req.user.isAdmin", req.user.isAdmin);
-      if (req.query.app === "admin" && req.user.isAdmin) {
+      if (appType === "admin" && req.user.isAdmin) {
         return res.redirect("https://localhost:3000/admin");
       }
-      if (req.query.app === "ticketing") {
+      if (appType === "ticketing") {
         return res.redirect("https://localhost:3000/home");
       }
       //   res.redirect("https://localhost:3000/home");
