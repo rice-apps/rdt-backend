@@ -249,7 +249,7 @@ app.post("/addevent", async (req, res, next) => {
   try {
     const newEvent = new Event({
       name: req.body.name,
-      startDate: req.body.date,
+      date: req.body.date,
       startTime: req.body.startTime,
       endTime: req.body.endTime,
       description: req.body.description,
