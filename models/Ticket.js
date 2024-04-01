@@ -30,6 +30,9 @@ const ticketSchema = new mongoose.Schema({
         // required: true,
         default: false,
     },
+    type: {
+        type: String,
+    }
     
 })
 
