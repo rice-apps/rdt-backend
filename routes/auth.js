@@ -37,11 +37,6 @@ router.get("/home", (req, res) => {
 
 router.get(
   "/auth/google",
-  (req, res, next) => {
-    // Attach app type to session or request object for later use
-    req.session.appType = req.query.app;
-    next();
-  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -68,7 +63,6 @@ router.get(
       //     secure: true,
       // });
 
-      console.log("req.session.appType", req.session.appType);
       console.log("req.query.app", req.query.app);
       console.log("req.user.isAdmin", req.user.isAdmin);
       if (req.query.app === "admin" && req.user.isAdmin) {
