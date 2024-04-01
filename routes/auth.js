@@ -69,11 +69,12 @@ router.get(
       // });
 
       console.log("req.session.appType", req.session.appType);
+      console.log("req.query.app", req.query.app);
       console.log("req.user.isAdmin", req.user.isAdmin);
-      if (req.session.appType === "admin" && req.user.isAdmin) {
+      if (req.query.app === "admin" && req.user.isAdmin) {
         return res.redirect("https://localhost:3000/admin");
       }
-      if (req.session.appType === "ticketing") {
+      if (req.query.app === "ticketing") {
         return res.redirect("https://localhost:3000/home");
       }
       //   res.redirect("https://localhost:3000/home");
