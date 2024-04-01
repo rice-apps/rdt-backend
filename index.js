@@ -427,23 +427,49 @@ app.put("/updateevent", async (req, res, next) => {
   res.json(updatedEvent);
 });
 
-app.put("/avatar", uploadImage("public_id_field"), async (req, res) => {
-  if (!req.fileurl || !req.fileid) {
-    return res.status(422).send({ message: "Image upload failed" });
+app.put(
+  "/imageCoverUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    const event = await Event.findOne({
+      _id: req.body._id,
+    }).exec();
+    if (!event) {
+      return res.status(404).send({ message: "Event not found" });
+    }
+
+    event.coverPhoto = req.fileurl;
+    await event.save();
+
+    res.json({ name: req.body.name, coverPhoto: req.fileurl });
   }
+);
 
-  const event = await Event.findOne({
-    name: req.body.name,
-  }).exec();
-  if (!event) {
-    return res.status(404).send({ message: "User profile not found" });
+app.put(
+  "/imageSeatingUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    const event = await Event.findOne({
+      _id: req.body._id,
+    }).exec();
+    if (!event) {
+      return res.status(404).send({ message: "Event not found" });
+    }
+
+    event.seatingPhoto = req.fileurl;
+    await event.save();
+
+    res.json({ name: req.body.name, seatingPhoto: req.fileurl });
   }
-
-  event.coverPhoto = req.fileurl;
-  await event.save();
-
-  res.json({ name: req.event.name, coverPhoto: req.fileurl });
-});
+);
 
 app.get("/ticketsforevent", async (req, res, next) => {
   // console.log(req)
