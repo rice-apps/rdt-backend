@@ -271,8 +271,8 @@ app.post("/addevent", async (req, res, next) => {
       studentDiscount: req.body.studentDiscount,
       atDoorPrice: req.body.atDoorPrice,
       availableSeats: req.body.availableSeats,
-      // photo: req.body.photo,
-      // availableSeats: req.body.seatingChart,
+      coverPhoto: req.body.coverPhoto,
+      seatingPhoto: req.body.seatingPhoto
     });
 
     //loops through each seat in the seating chart and creates a ticket for the seat
