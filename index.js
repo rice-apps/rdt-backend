@@ -157,11 +157,7 @@ app.get("/getallfutureevents", async (req, res, next) => {
     const future_events = await Event.find({
       startDate: { $gte: currentDate },
     });
-    if (future_events.length != 0) {
-      res.json(future_events);
-    } else {
-      throw new Error("No Upcoming Events. Check Later");
-    }
+    res.json(future_events)
   } catch (err) {
     console.log(err.message);
     res.status(405).json({ error: err.message });
