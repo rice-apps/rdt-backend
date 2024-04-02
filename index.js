@@ -325,16 +325,25 @@ app.put("/purchaseticket", async (req, res, next) => {
     // Not sure if front end will know ticket IDs, might only pass in seat numbers
     // Need to discuss how seat selection process will work
     let purchasedTickets = [];
-    for (const ticketID of req.body.ticketIDs) {
-      const ticket = await Ticket.findOne({ _id: ticketID });
-      ticket.user = req.body.user_id;
-      ticket.isPaid = true;
+    for (const ticketInfo of req.body.tickets) {
+      // {
+        // seat: 
+        // type: 
+        // buyername,
+        // attendeename
+      // }
+      const ticket = await Ticket.findOne({ seat: ticketInfo.seat });
+      // ticket.user = req.body.user_id;
+      ticket.type = ticketInfo.type
+      ticket.buyerName = ticketInfo.buyerName
+      ticket.attendeeName = ticketInfo.attendeeName
+      // ticket.isPaid = true;
       await ticket.save();
 
       purchasedTickets.push(ticket);
 
       // Push ticket into user's array of tickets
-      user.tickets.push(ticketID);
+      user.tickets.push(ticket);
       await user.save();
     }
 
