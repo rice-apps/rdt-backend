@@ -2,6 +2,14 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const mongoDBURL = process.env.MONGODB_URL;
+const uploadImage = require("./uploadCloudinary");
+const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 mongoose
   .connect(mongoDBURL, {
@@ -262,7 +270,7 @@ app.post("/addevent", async (req, res, next) => {
       location: req.body.location,
       studentDiscount: req.body.studentDiscount,
       atDoorPrice: req.body.atDoorPrice,
-      availableSeats: req.body.availableSeats
+      availableSeats: req.body.availableSeats,
       // photo: req.body.photo,
       // availableSeats: req.body.seatingChart,
     });
@@ -277,7 +285,7 @@ app.post("/addevent", async (req, res, next) => {
           isPaid: false,
           user: null,
           buyerName: null,
-          attendeeName: null
+          attendeeName: null,
         });
         await newTicket.save();
         newEvent.tickets.push(newTicket._id);
@@ -421,35 +429,122 @@ app.delete("/remove", (req, res, next) => {
 
 app.put("/updateevent", async (req, res, next) => {
   // console.log(req);
-  let filter = req.query
-  let update = req.body
+  let filter = req.query;
+  let update = req.body;
   let updatedEvent = await Event.findOneAndUpdate(filter, update);
   // res.status(200)
-  res.json(updatedEvent)
-
+  res.json(updatedEvent);
 });
 
-app.get('/ticketsforevent', async (req, res, next) => {
+app.put(
+  "/imageCoverUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    const event = await Event.findOne({
+      _id: req.body._id,
+    }).exec();
+    if (!event) {
+      return res.status(404).send({ message: "Event not found" });
+    }
+
+    event.coverPhoto = req.fileurl;
+    await event.save();
+
+    res.json({ name: req.body.name, coverPhoto: req.fileurl });
+  }
+);
+
+app.put(
+  "/imageSeatingUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    const event = await Event.findOne({
+      _id: req.body._id,
+    }).exec();
+    if (!event) {
+      return res.status(404).send({ message: "Event not found" });
+    }
+
+    event.seatingPhoto = req.fileurl;
+    await event.save();
+
+    res.json({ name: req.body.name, seatingPhoto: req.fileurl });
+  }
+);
+
+app.put(
+  "/imageRegisterCoverUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    // const event = await Event.findOne({
+    //   _id: req.body._id,
+    // }).exec();
+    // if (!event) {
+    //   return res.status(404).send({ message: "Event not found" });
+    // }
+
+    // event.seatingPhoto = req.fileurl;
+    // await event.save();
+
+    res.json({ coverPhoto: req.fileurl });
+  }
+);
+
+app.put(
+  "/imageRegisterSeatingUpload",
+  uploadImage("public_id_field"),
+  async (req, res) => {
+    if (!req.fileurl || !req.fileid) {
+      return res.status(422).send({ message: "Image upload failed" });
+    }
+
+    // const event = await Event.findOne({
+    //   _id: req.body._id,
+    // }).exec();
+    // if (!event) {
+    //   return res.status(404).send({ message: "Event not found" });
+    // }
+
+    // event.seatingPhoto = req.fileurl;
+    // await event.save();
+
+    res.json({ seatingPhoto: req.fileurl });
+  }
+);
+
+app.get("/ticketsforevent", async (req, res, next) => {
   // console.log(req)
-  let name = req.query.name
+  let name = req.query.name;
   const event = await Event.findOne({ name: name });
   const ticketIds = event.tickets;
-  console.log(ticketIds)
+  console.log(ticketIds);
 
   try {
     // Convert ticketIds to ObjectIDs
-    const objectIds = ticketIds.map(id => new mongoose.Types.ObjectId(id));
+    const objectIds = ticketIds.map((id) => new mongoose.Types.ObjectId(id));
 
     // Find tickets by IDs
     const tickets = await Ticket.find({ _id: { $in: objectIds } });
-    console.log(tickets)
+    console.log(tickets);
 
     res.json({ tickets });
   } catch (error) {
-    console.error('Error fetching tickets:', error);
-    res.status(500).json({ error: 'Failed to fetch tickets' });
+    console.error("Error fetching tickets:", error);
+    res.status(500).json({ error: "Failed to fetch tickets" });
   }
-})
+});
 
 // TODO ROUTE #5 - Get shopping items that satisfy a condition/filter (harder)
 
